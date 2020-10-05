@@ -35,7 +35,7 @@ class SpotifyClient:
             # "show_dialog": SHOW_DIALOG_str,
             "client_id": self.client_id
         }
-        url_args = "&".join([f"{key}={quote(val)}" for key, val in auth_query_parameters.items()])
+        url_args = "&".join([f"{key}={quote(str(val))}" for key, val in auth_query_parameters.items()])
         return f"{self.SPOTIFY_AUTH_URL}/?{url_args}"
 
     def get_authorization(self, auth_token):

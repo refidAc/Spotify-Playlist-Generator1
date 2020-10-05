@@ -2,8 +2,8 @@ import os
 import ast
 import json
 import requests
-from app.api.spotify_client import SpotifyClient
 from app.api.spotify_handler import SpotifyHandler
+from app.api.spotify_client import SpotifyClient
 from flask import render_template, Blueprint, request, redirect, url_for, session
 
 blueprint = Blueprint('app', __name__)
@@ -11,18 +11,21 @@ blueprint = Blueprint('app', __name__)
 client_id = os.environ.get('CLIENT_ID')
 client_secret = os.environ.get('CLIENT_SECRET')
 
+
 spotify_client = SpotifyClient(client_id, client_secret, port=8002)
 spotify_handler = SpotifyHandler()
 
 
 @blueprint.route("/login", methods=['POST', 'GET'])
 def login():
+    # Auth Step 1: Authorization
     auth_url = spotify_client.get_auth_url()
     return redirect(auth_url)
 
 
 @blueprint.route("/callback/q")
 def callback():
+    # Requests refresh and access tokens
     auth_token = request.args['code']
     spotify_client.get_authorization(auth_token)
     authorization_header = spotify_client._authorization_header
@@ -39,7 +42,7 @@ def select_tracks():
 @blueprint.route("/load", methods=['GET', 'POST'])
 def load():
     authorization_header = session['authorization_header']
-    get_letters = lambda x: ''.join([i for i in x if not i.isdigit()])
+    extract_letters = lambda x: ''.join([letter for letter in x if not letter.isdigit()])
 
     if request.method == 'GET':
         # -------- Get user's name, id, and set session --------
@@ -53,7 +56,7 @@ def load():
         return render_template('select.html',
                                user_display_name=user_display_name,
                                playlists_data=playlist_data,
-                               func=get_letters)
+                               func=extract_letters)
 
     return render_template('404.html')
 
@@ -68,7 +71,7 @@ def finetune():
 @blueprint.route("/your-playlist", methods=['GET', 'POST'])
 def your_playlist():
     authorization_header = session['authorization_header']
-    fine_tune_vals = ast.literal_eval(request.form.get('fine-tune-values'))
+    fine_tune_vals = json.loads(f"[{request.form.get('fine-tune-values')}]")
     fine_tune_vals = [{val['key']: val['val'] for val in fine_tune_vals}][0]
 
     if request.method == 'POST':
@@ -83,10 +86,10 @@ def your_playlist():
         get_reccomended_url = f"https://api.spotify.com/v1/recommendations?limit={25}"
         response = requests.get(get_reccomended_url, headers=authorization_header, params=params).text
         tracks = list(json.loads(response)['tracks'])
-        tracks_uris = [track['uri'] for track in tracks]
-        session['traks_uri'] = track_uris
+        tracks_uri = [track['uri'] for track in tracks]
+        session['tracks_uri'] = tracks_uri
 
-        return render_template('result.html', data=response)
+        return render_template('result.html', data=tracks)
 
     return redirect(url_for('not_found'))
 

@@ -14,6 +14,9 @@ class SpotifyHandler:
         return json.loads(profile_data)
 
     def get_user_playlist_data(self, auth_header, user_id):
+        """
+        :return: list of dictionaries with playlist information
+        """
         playlist_api_endpoint = f"https://api.spotify.com/v1/users/{user_id}/playlists"
         playlists = json.loads(requests.get(playlist_api_endpoint, headers=auth_header).text)
         playlists = playlists['items']
@@ -27,11 +30,14 @@ class SpotifyHandler:
                 'playlist_img_url': playlist['images'][0]['url'],
                 'playlist_tracks_url': playlist['tracks']['href'],
                 'playlist_id': playlist['id'],
-                'playlist_tracks': self.get_playlist_tracks(auth_header, playlist['id'])
+                'playlist_tracks': self._get_playlist_tracks(auth_header, playlist['id'])
             })
         return playlist_data
 
-    def get_playlist_tracks(self, auth_header, playlist_id):
+    def _get_playlist_tracks(self, auth_header, playlist_id):
+        """
+        :return: list of dictionaries with track information
+        """
         playlist_api_endpoint = f'https://api.spotify.com/v1/playlists/{playlist_id}/tracks'
         tracks = json.loads(requests.get(playlist_api_endpoint, headers=auth_header).text)['items']
         return [

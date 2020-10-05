@@ -15,15 +15,17 @@
 A Flask web app used to generate a Spotify playlist based on selected tracks and personal preferences.
 
 ### Built With
-* [Bootstrap](https://getbootstrap.com)
-* [Flask](https://flask.palletsprojects.com/en/1.1.x/)
-* [JQuery](https://jquery.com)
+* [Flask](https://flask.palletsprojects.com/en/1.1.x/) - backend
+* [Bootstrap](https://getbootstrap.com) - frontend
+* [JQuery](https://jquery.com) - frontend
 * [Spotify API](https://developer.spotify.com/documentation/web-api/)
+* CSS for styling
 
 
 <!-- GETTING STARTED -->
 ## Getting Started
-Clone using `https://github.com/musikalkemist/spotifyplaylistgenerator.git` and use `flask run`. 
+Clone using `https://github.com/musikalkemist/spotifyplaylistgenerator.git` and use `flask run`.
+ 
 You can also visit our [hosted version](https://spotify-playlist-generator1.herokuapp.com/).
 
 ### Prerequisites
