@@ -24,7 +24,7 @@ A Flask web app used to generate a Spotify playlist based on selected tracks and
 
 <!-- GETTING STARTED -->
 ## Getting Started
-Clone using `https://github.com/musikalkemist/spotifyplaylistgenerator.git` and use `flask run`.
+Clone using `https://github.com/AcrobaticPanicc/Spotify-Playlist-Generator1.git` and use `flask run`.
  
 You can also visit our [hosted version](https://spotify-playlist-generator1.herokuapp.com/).
 
